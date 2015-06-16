@@ -20,9 +20,6 @@ describe Rack::VCR do
   include Rack::Test::Methods
 
   vcr = Rack::VCR.new
-  around(:each) do |example|
-    vcr.record(example.description, &example)
-  end
 
   let(:app) {
     Rack::Builder.new do
@@ -32,9 +29,10 @@ describe Rack::VCR do
   }
 
   it 'runs the test' do
-    VCR.use_cassette("hi") do
+    VCR.use_cassette("hi", record: :all) do
       get '/hi'
       expect(last_response.body).to eq 'Hello'
+      post '/yo', name: "John"
     end
   end
 end
