@@ -4,13 +4,8 @@ require "vcr"
 
 module Rack
   class VCR
-    def record(description)
-      yield
-    end
-
-    def new(app)
+    def initialize(app)
       @app = app
-      self
     end
 
     def call(env)

@@ -26,11 +26,9 @@ describe Rack::VCR do
     FileUtils.rm_r VCR.configuration.cassette_library_dir
   end
 
-  vcr = Rack::VCR.new
-
   let(:app) {
     Rack::Builder.new do
-      use vcr
+      use Rack::VCR
       run MyApp
     end
   }

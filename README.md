@@ -20,7 +20,13 @@ Or install it yourself as:
 
 ## Usage
 
-TBD
+```ruby
+Rack::Builder.new do
+  use Rack::VCR
+  run RackApp
+end
+```
+
 
 ## Notes
 
