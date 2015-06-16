@@ -28,8 +28,18 @@ module Rack
       end
 
       def request_headers
-        @req.env.select {|k, v| k.start_with? 'HTTP_' }
-          .collect { |k, v| [normalize_header_field(k), v] }
+        headers_hash_from_env.merge(content_field_hash)
+      end
+
+      def headers_hash_from_env
+        fields = @req.env.select {|k, v| k.start_with? 'HTTP_' }
+                 .collect { |k, v| [normalize_header_field(k), v] }
+        Hash[fields]
+      end
+
+      def content_field_hash
+        { "Content-Type"   => @req.env["CONTENT_TYPE"],
+          "Content-Length" => @req.env["CONTENT_LENGTH"] }.reject {|k, v| v.nil? or v == "0" }
       end
 
       def normalize_header_field(k)
