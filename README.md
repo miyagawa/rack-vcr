@@ -20,13 +20,39 @@ Or install it yourself as:
 
 ## Usage
 
-```ruby
-Rack::Builder.new do
-  use Rack::VCR
-  run RackApp
-end
-```
+### Rails
 
+TBD
+
+### Sinatra/Rack
+
+To capture HTTP interactions, enable VCR configuration in addition to this middleware, in the spec:
+
+```ruby
+require 'rack/test'
+
+VCR.configure do |config|
+  config.cassette_library_dir = "vcr_cassettes"
+end
+
+describe 'My Web App' do
+  include Rack::Test::Methods
+
+  let(:app) {
+    Rack::Builder.new do
+      use Rack::VCR
+      run Sinatra::Application
+    end
+  }
+
+  it 'runs the request' do
+    VCR.use_cassette('hello', record: :all) do
+      get "/hello"
+    end
+    # Now you get vcr_cassettes/hello.yml saved
+  end
+end
+````
 
 ## Notes
 
