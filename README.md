@@ -1,8 +1,6 @@
-# Rack::Vcr
+# Rack::VCR
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rack/vcr`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Rack::VCR captures incoming HTTP requests and responses on your Rack application (Rails, Sinatra) and saves them as a VCR fixture in cassettes.
 
 ## Installation
 
@@ -22,18 +20,22 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+TBD
 
-## Development
+## Notes
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake rspec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+There's a few similar gems available on Rubygems and GitHub:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+* [VCR::Middleware::Rack](https://www.relishapp.com/vcr/vcr/v/1-6-0/docs/middleware/rack) - Records *outgoing* HTTP requests inside a Rack application. Quite opposite to what Rack::VCR gem does.
+* [rack-recorder](https://github.com/kodev/rack-recorder) - Essentially the same with Rack::VCR, but is very limited in what it does. It doesn't export the captured transaction in VCR compatible format.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rack-vcr.
+Bug reports and pull requests are welcome on GitHub at https://github.com/miyagawa/rack-vcr.
 
+## Author
+
+Tatsuhiko Miyagawa
 
 ## License
 
