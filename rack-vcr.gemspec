@@ -5,7 +5,7 @@ require 'rack/vcr/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "rack-vcr"
-  spec.version       = Rack::Vcr::VERSION
+  spec.version       = Rack::VCR::VERSION
   spec.authors       = ["Tatsuhiko Miyagawa"]
   spec.email         = ["miyagawa@bulknews.net"]
 
@@ -22,4 +22,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec"
+
+  spec.add_development_dependency "sinatra", "~> 1.4"
+  spec.add_development_dependency "rack-test", "~> 0.6"
+  spec.add_development_dependency "vcr", "~> 2.9"
 end
