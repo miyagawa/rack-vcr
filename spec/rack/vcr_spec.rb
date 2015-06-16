@@ -28,11 +28,16 @@ describe Rack::VCR do
     end
   }
 
-  it 'runs the test' do
-    VCR.use_cassette("hi", record: :all) do
+  let(:cassette) { VCR::Cassette.new(cassette_name) }
+  let(:cassette_name) { "test" }
+
+  it 'runs the HTTP request' do
+    VCR.use_cassette(cassette_name, record: :all) do
       get '/hi'
       expect(last_response.body).to eq 'Hello'
       post '/yo', name: "John"
+
+      expect(cassette.http_interactions.interactions.count).to be(2)
     end
   end
 end
