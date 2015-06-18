@@ -12,7 +12,7 @@ module Rack
 
     def call(env)
       if @cassette
-        ::VCR.use_cassette(@cassette) do
+        ::VCR.use_cassette(@cassette, record: :new_episodes) do
           run_request(env)
         end
       else

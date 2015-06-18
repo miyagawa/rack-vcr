@@ -13,13 +13,15 @@ class MyApp < Sinatra::Application
   end
 end
 
-VCR.configure do |config|
-  config.cassette_library_dir = "tmp/cassettes"
-  config.hook_into :webmock
-end
-
 describe Rack::VCR do
   include Rack::Test::Methods
+
+  before(:each) do
+    VCR.configure do |config|
+      config.cassette_library_dir = "tmp/cassettes"
+      config.hook_into :webmock
+    end
+  end
 
   around(:each) do |example|
     example.run

@@ -2,12 +2,14 @@ require 'spec_helper'
 require 'sinatra'
 require 'rack/test'
 
-VCR.configure do |config|
-  config.cassette_library_dir = "spec/cassettes"
-end
-
 describe "Rack::VCR with replay" do
   include Rack::Test::Methods
+
+  before(:each) do
+    VCR.configure do |config|
+      config.cassette_library_dir = "spec/cassettes"
+    end
+  end
 
   context 'with the replay option with no VCR cassette' do
     let(:app) {

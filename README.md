@@ -119,6 +119,7 @@ Rack::Builder.new do
   use Rack::VCR, replay: true
   run MyApp
 end
+```
 
 
 ## Notes
