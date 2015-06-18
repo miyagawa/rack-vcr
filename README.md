@@ -22,7 +22,31 @@ Or install it yourself as:
 
 ### Rails
 
-TBD
+In `config/initializer/rack_vcr.rb`:
+
+```ruby
+if Rails.env.test?
+  Rails.configuration.middleware.insert(0, Rack::VCR)
+end
+```
+
+In `spec/spec_helper.rb`:
+
+```ruby
+VCR.configure do |config|
+  config.cassette_library_dir = 'doc/cassettes'
+end
+
+RSpec.configure do |config|
+  config.around(:each, type: :request) do |ex|
+    host! "yourapp.hostname"
+    name = example.full_description.gsub /[^\w\-]/, '_'
+    VCR.use_cassette(name, record: :all) do
+      ex.run
+    end
+  end
+end
+```
 
 ### Sinatra/Rack
 
