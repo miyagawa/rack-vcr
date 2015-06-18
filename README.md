@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-### Rails
+### Capturing in Rails
 
 In `config/initializer/rack_vcr.rb`:
 
@@ -48,9 +48,10 @@ RSpec.configure do |config|
 end
 ```
 
-### Sinatra/Rack
+### Capturing in Sinatra/Rack
 
-To capture HTTP interactions, enable VCR configuration in addition to this middleware, in the spec:
+In `spec/spec_helper.rb`:
+
 
 ```ruby
 require 'rack/test'
@@ -76,7 +77,49 @@ describe 'My Web App' do
     # Now you get vcr_cassettes/hello.yml saved
   end
 end
-````
+```
+
+### Replaying
+
+Rack::VCR also supports *replaying* recorded VCR cassettes. It means you can record the HTTP interactions with the real app (on CI), then use the cassette to run a fake/mock API server using Rack::VCR!
+
+To replay cassettes, enable Rack::VCR with `:replay` option in `config.ru` or its equivalent.
+
+```ruby
+VCR.configure do |config|
+  config.cassette_library_dir = "/path/to/cassettes"
+end
+
+Rack::Builder.new do
+  use Rack::VCR, replay: true, cassette: "test"
+  run MyApp
+end
+```
+
+With the above setting, Rack::VCR will try to locate the cassette named "test" to replay if the request matches with what's recorded, and fall through to the original application if it's not there.
+
+To customize the cassette name in runtime, you can write a custom piece of Rack middleware around Rack::VCR to wrap the application in `VCR.use_cassette` with its own `:record` option.
+
+```ruby
+class CassetteLocator
+  def initialize(app)
+    @app = app
+  end
+  
+  def call(env)
+    cassette = ... # determine cassette from env
+    VCR.use_cassette(casssette, record: :none) do
+      @app.call(env)
+    end
+  end
+end
+
+Rack::Builder.new do 
+  use CassetteLocator
+  use Rack::VCR, replay: true
+  run MyApp
+end
+
 
 ## Notes
 

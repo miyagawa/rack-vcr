@@ -7,9 +7,20 @@ module Rack
     def initialize(app, options = {})
       @app = app
       @replay = options[:replay]
+      @cassette = options[:cassette]
     end
 
     def call(env)
+      if @cassette
+        ::VCR.use_cassette(@cassette) do
+          run_request(env)
+        end
+      else
+        run_request(env)
+      end
+    end
+
+    def run_request(env)
       req = Rack::Request.new(env)
       transaction = Transaction.new(req)
 
