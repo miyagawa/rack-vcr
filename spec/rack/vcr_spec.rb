@@ -28,7 +28,7 @@ describe Rack::VCR do
 
   let(:app) {
     Rack::Builder.new do
-      use Rack::VCR
+      use Rack::VCR, replay: true
       run MyApp
     end
   }
@@ -39,14 +39,25 @@ describe Rack::VCR do
   it 'runs the HTTP request' do
     VCR.use_cassette(cassette_name, record: :all) do
       get '/hi'
-      expect(last_response.body).to eq 'Hello'
+      expect(last_response.body).to eq "Hello"
       post '/yo', name: "John"
     end
 
     expect(cassette.http_interactions.interactions.count).to be(2)
   end
 
-  it 'replays the cassette' do
+  it 'replays the cassette on Rack' do
+    VCR.use_cassette(cassette_name, record: :new_episodes) do
+      get '/hi'
+    end
+
+    VCR.use_cassette(cassette_name, record: :new_episodes) do
+      get '/hi'
+      expect(last_response.body).to eq "Hello"
+    end
+  end
+
+  it 'replays the cassette with webmock' do
     VCR.use_cassette(cassette_name, record: :all) do
       get 'http://ruby-lang.org/hi'
     end

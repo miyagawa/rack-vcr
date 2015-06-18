@@ -1,22 +1,28 @@
 module Rack
   class VCR
     class Transaction
-      def self.capture(*args)
-        new(*args).record
+      def initialize(req)
+        @req = req
       end
 
-      def initialize(req, res)
-        @req, @res = req, res
-      end
-
-      def record
+      def capture(res)
+        @res = res
         ::VCR.record_http_interaction(::VCR::HTTPInteraction.new(vcr_request, vcr_response))
+      end
+
+      def can_replay?
+        ::VCR.http_interactions.has_interaction_matching?(vcr_request)
+      end
+
+      def replay
+        to_rack_response(::VCR.http_interactions.response_for(vcr_request))
       end
 
       private
 
       def vcr_request
-        ::VCR::Request.new(@req.request_method, @req.url, try_read(@req.body), request_headers)
+        @vcr_request ||=
+          ::VCR::Request.new(@req.request_method, @req.url, try_read(@req.body), request_headers)
       end
 
       def vcr_response
@@ -25,6 +31,14 @@ module Rack
           @res.headers,
           @res.body.join(''),
         )
+      end
+
+      def to_rack_response(res)
+        [
+          res.status.code,
+          Hash[res.headers.map {|k, v| [k, v.join("\n")] }],
+          [res.body],
+        ]
       end
 
       def request_headers
