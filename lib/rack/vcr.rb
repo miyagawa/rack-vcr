@@ -8,11 +8,12 @@ module Rack
       @app = app
       @replay = options[:replay]
       @cassette = options[:cassette]
+      @record   = options[:record] || :new_episodes
     end
 
     def call(env)
       if @cassette
-        ::VCR.use_cassette(@cassette, record: :new_episodes) do
+        ::VCR.use_cassette(@cassette, record: @record) do
           run_request(env)
         end
       else

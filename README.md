@@ -91,12 +91,15 @@ VCR.configure do |config|
 end
 
 Rack::Builder.new do
-  use Rack::VCR, replay: true, cassette: "test"
+  use Rack::VCR, replay: true,
+    cassette: "test", record: :new_episodes
   run MyApp
 end
 ```
 
-With the above setting, Rack::VCR will try to locate the cassette named "test" to replay if the request matches with what's recorded, and fall through to the original application if it's not there.
+With the above setting, Rack::VCR will try to locate the cassette named "test" to replay if the request matches with what's recorded, and fall through to the original application if it's not there. It also records the result to the cassette for further requests with the `:record` option set to `:new_episodes`.
+
+You can set `:record` option to `:none` for example, to only serve what's already recorded in the cassette. The default value for `:record` option is `:new_episodes`.
 
 To customize the cassette name in runtime, you can write a custom piece of Rack middleware around Rack::VCR to wrap the application in `VCR.use_cassette` with its own `:record` option.
 

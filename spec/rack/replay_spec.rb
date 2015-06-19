@@ -24,7 +24,7 @@ describe "Rack::VCR with replay" do
       expect(last_response.status).to eq 404
     end
   end
-  
+
   context 'with the replay option with hardcoded VCR cassette' do
     let(:app) {
       Rack::Builder.new do
