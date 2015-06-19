@@ -1,3 +1,6 @@
+## 0.1.4 (2015/06/18)
+- Add :record option to override the default :new_episodes
+
 ## 0.1.3 (2015/06/18)
 - Document replay/cassette option and add tests for them
 
