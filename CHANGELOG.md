@@ -1,3 +1,6 @@
+## 0.1.3 (2015/06/18)
+- Document replay/cassette option and add tests for them
+
 ## 0.1.2 (2015/06/17)
 - Add experimental `replay: true` option to replay VCR cassette on the Rack layer
 
