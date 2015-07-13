@@ -38,11 +38,11 @@ VCR.configure do |config|
 end
 
 RSpec.configure do |config|
-  config.around(:each, type: :request) do |ex|
+  config.around(:each, type: :request) do |example|
     host! "yourapp.hostname"
     name = example.full_description.gsub /[^\w\-]/, '_'
     VCR.use_cassette(name, record: :all) do
-      ex.run
+      example.run
     end
   end
 end
