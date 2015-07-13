@@ -48,6 +48,22 @@ RSpec.configure do |config|
 end
 ```
 
+The above example might not work if you were using RSpec 2.x, in which case you might need to write as follows:
+
+```ruby
+RSpec.configure do |config|
+  config.around(:each, type: :request) do |ex|
+    host! "yourapp.hostname"
+    name = example.full_description.gsub /[^\w\-]/, '_'
+    VCR.use_cassette(name, record: :all) do
+      ex.run
+    end
+  end
+end
+```
+
+Read more about the changes around `example` on [RSpec blog post](http://rspec.info/blog/2014/05/notable-changes-in-rspec-3/).
+
 ### Capturing in Sinatra/Rack
 
 In `spec/spec_helper.rb`:
