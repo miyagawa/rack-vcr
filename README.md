@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ### Capturing in Rails
 
-In `config/initializer/rack_vcr.rb`:
+In `config/initializers/rack_vcr.rb`:
 
 ```ruby
 if Rails.env.test?
