@@ -127,7 +127,7 @@ class CassetteLocator
   
   def call(env)
     cassette = ... # determine cassette from env
-    VCR.use_cassette(casssette, record: :none) do
+    VCR.use_cassette(cassette, record: :none) do
       @app.call(env)
     end
   end
