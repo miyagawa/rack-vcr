@@ -1,3 +1,7 @@
+## 0.1.5 (2017/07/11)
+- Documentation fixes
+- Support VCR 3+
+
 ## 0.1.4 (2015/06/18)
 - Add :record option to override the default :new_episodes
 
