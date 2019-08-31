@@ -46,8 +46,10 @@ module Rack
       end
 
       def headers_hash_from_env
-        fields = @req.env.select {|k, v| k.start_with? 'HTTP_' }
-                 .collect { |k, v| [normalize_header_field(k), v] }
+        fields = @req.env
+                   .map { |k, v| [k.to_s, v] }
+                   .select {|k, v| k.start_with?('HTTP_') }
+                   .collect { |k, v| [normalize_header_field(k), v] }
         Hash[fields]
       end
 

@@ -69,4 +69,35 @@ describe Rack::VCR do
       expect(res.body).to eq "Hello"
     end
   end
+
+  context 'with symbol key in env' do
+    class SymbolKeyEnv
+      def initialize(app)
+        @app = app
+      end
+
+      def call(env)
+        env[:evil] = :evil
+        @app.call(env)
+      end
+    end
+
+    let(:app) {
+      Rack::Builder.new do
+        use SymbolKeyEnv
+        use Rack::VCR, replay: true
+        run MyApp
+      end
+    }
+
+    it 'runs the HTTP request' do
+      VCR.use_cassette(cassette_name, record: :all) do
+        get '/hi'
+        expect(last_response.body).to eq "Hello"
+        post '/yo', name: "John"
+      end
+
+      expect(cassette.http_interactions.interactions.count).to be(2)
+    end
+  end
 end
