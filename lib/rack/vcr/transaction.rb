@@ -29,7 +29,7 @@ module Rack
         ::VCR::Response.new(
           ::VCR::ResponseStatus.new(@res.status, nil),
           @res.headers,
-          @res.body.join(''),
+          @res.body.to_enum.to_a.join(''),
         )
       end
 
