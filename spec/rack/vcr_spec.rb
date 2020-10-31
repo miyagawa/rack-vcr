@@ -100,4 +100,25 @@ describe Rack::VCR do
       expect(cassette.http_interactions.interactions.count).to be(2)
     end
   end
+
+  context 'with Rack::Static' do
+    let(:app) {
+      root_dir = File.expand_path('../..', __dir__)
+      Rack::Builder.new do
+        use Rack::VCR, replay: true
+        use Rack::Static, urls: ['/LICENSE.txt'], root: root_dir
+        run MyApp
+      end
+    }
+
+    it 'runs the HTTP request' do
+      license_text = File.read(File.expand_path('../../LICENSE.txt', __dir__))
+      VCR.use_cassette(cassette_name, record: :all) do
+        get '/LICENSE.txt'
+        expect(last_response.body).to eq license_text
+      end
+
+      expect(cassette.http_interactions.interactions.count).to be(1)
+    end
+  end
 end
