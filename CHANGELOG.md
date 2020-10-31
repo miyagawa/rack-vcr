@@ -1,3 +1,6 @@
+## 0.1.6 (2020/10/31)
+- Support Rack 2.1+ (#10)
+
 ## 0.1.5 (2017/07/11)
 - Documentation fixes
 - Support VCR 3+
