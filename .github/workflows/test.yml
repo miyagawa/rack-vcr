@@ -30,3 +30,9 @@ jobs:
           bundle exec rake
         env:
           RACK_VERSION: ${{ matrix.rack_version }}
+          MEASURE_COVERAGE: true
+      - uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report
+          path: coverage/
+          if-no-files-found: error
